@@ -55,7 +55,7 @@ export const deletePost = (req, res) => {
 export const updatePost = (req, res) => {
   Post.findByIdAndUpdate(req.params.id, { title: req.body.title, tags: req.body.tags, content: req.body.content })
   .then(result => {
-    res.json({ message: 'Post updated!' });
+    res.json(result);
   })
   .catch(error => {
     res.json({ error });
