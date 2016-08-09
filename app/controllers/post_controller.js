@@ -4,7 +4,7 @@ import Post from '../models/post_model';
 // and we purposefully don't return content here either
 const cleanPosts = (posts) => {
   return posts.map(post => {
-    return { id: post._id, title: post.title, tags: post.tags };
+    return { id: post._id, title: post.title, tags: post.tags, content: post.content };
   });
 };
 
@@ -12,7 +12,7 @@ export const createPost = (req, res) => {
   const post = new Post();
   post.title = req.body.title;
   post.tags = req.body.tags;
-  post.contents = req.body.content;
+  post.content = req.body.content;
   post.save()
   .then(result => {
     res.json({ message: 'Post created!' });
@@ -25,8 +25,7 @@ export const createPost = (req, res) => {
 export const getPosts = (req, res) => {
   Post.find({}).sort('-date')
   .then(result => {
-    cleanPosts(result);
-    res.json({ message: 'Posts retrieved!' });
+    res.json(cleanPosts(result));
   })
   .catch(error => {
     res.json({ error });
@@ -36,17 +35,17 @@ export const getPosts = (req, res) => {
 export const getPost = (req, res) => {
   Post.findById(req.params.id)
   .then(result => {
-    res.json({ message: 'Post retrieved!' });
+    res.json(result);
   })
   .catch(error => {
     res.json({ error });
   });
 };
-
+// removing all my posts?
 export const deletePost = (req, res) => {
-  Post.remove(req.params.id)
+  Post.findByIdAndRemove(req.params.id)
   .then(result => {
-    res.json({ message: 'Post retrieved!' });
+    res.json({ message: 'Post removed!' });
   })
   .catch(error => {
     res.json({ error });
