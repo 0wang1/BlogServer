@@ -1,10 +1,8 @@
 import Post from '../models/post_model';
 
-// this cleans the posts because we use id instead of dangling _id
-// and we purposefully don't return content here either
 const cleanPosts = (posts) => {
   return posts.map(post => {
-    return { id: post._id, title: post.title, tags: post.tags, content: post.content };
+    return { id: post._id, title: post.title, tags: post.tags, content: post.content, author: post.author };
   });
 };
 
@@ -13,6 +11,7 @@ export const createPost = (req, res) => {
   post.title = req.body.title;
   post.tags = req.body.tags;
   post.content = req.body.content;
+  post.author = req.user.username;
   post.save()
   .then(result => {
     res.json({ message: 'Post created!' });
@@ -41,7 +40,7 @@ export const getPost = (req, res) => {
     res.json({ error });
   });
 };
-// removing all my posts?
+
 export const deletePost = (req, res) => {
   Post.findByIdAndRemove(req.params.id)
   .then(result => {
@@ -53,7 +52,7 @@ export const deletePost = (req, res) => {
 };
 
 export const updatePost = (req, res) => {
-  Post.findByIdAndUpdate(req.params.id, { title: req.body.title, tags: req.body.tags, content: req.body.content })
+  Post.findByIdAndUpdate(req.params.id, { title: req.body.title, tags: req.body.tags, content: req.body.content, author: req.user.username })
   .then(result => {
     res.json(result);
   })
