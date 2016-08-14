@@ -1,17 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
-// create a schema for posts with a field
+
 const UserSchema = new Schema({
-  userName: String,
   email: { type: String, unique: true, lowercase: true },
   password: String,
+  username: String,
 });
 
 UserSchema.set('toJSON', {
   virtuals: true,
 });
 
-// create model class
+
 UserSchema.pre('save', function beforeyYourModelSave(next) {
   const user = this;
   // only hash the password if it has been modified (or is new)
@@ -32,9 +32,6 @@ UserSchema.pre('save', function beforeyYourModelSave(next) {
       });
     });
   }
-  const err = new Error('something went wrong');
-  next(err);
-  return (next);
 });
 
 UserSchema.methods.comparePassword = function comparePassword(candidatePassword, callback) {

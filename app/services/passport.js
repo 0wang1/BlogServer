@@ -3,13 +3,14 @@ import LocalStrategy from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
 import User from '../models/user_model';
-import config from '../config.js';
+import dotenv from 'dotenv';
+dotenv.config({ silent: true });
 
 const localOptions = { usernameField: 'email' };
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-  secretOrKey: config.secret,
+  secretOrKey: process.env.API_SECRET,
 };
 
 

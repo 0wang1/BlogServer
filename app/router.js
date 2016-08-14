@@ -10,14 +10,6 @@ router.get('/', (req, res) => {
   res.json({ message: 'welcome to our blog api!' });
 });
 
-// router.route('/posts')
-// .get((req, res) => {
-//   Posts.getPosts(req, res);
-// })
-// .post(requireAuth, (req, res) => {
-//   Posts.createPost(req, res);
-// });
-
 router.route('/posts')
 .post(requireAuth, Posts.createPost)
 .get(Posts.getPosts);
